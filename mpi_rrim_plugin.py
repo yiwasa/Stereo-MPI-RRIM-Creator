@@ -68,7 +68,12 @@ class MpiRrimPluginPlugin(object):
         iface.addToolBarIcon(self.action)
 
     def unload(self):
-        QgsApplication.processingRegistry().removeProvider(self.provider)
+        # 既にC++側でオブジェクトが削除されている場合はエラーを無視する
+        try:
+            QgsApplication.processingRegistry().removeProvider(self.provider)
+        except RuntimeError:
+            pass
+            
         iface.removeToolBarIcon(self.action)
     
     def run(self):
