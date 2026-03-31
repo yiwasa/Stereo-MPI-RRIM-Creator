@@ -114,7 +114,7 @@ All final design decisions, verifications, and operational tests were strictly c
   * 例: 1m DEMの場合は `150`。5m DEMの場合は `30`。
 * **Gamma**: コントラストを調整します。谷底をより暗く表現したい場合は、MPIのGammaを小さく（例：`0.8`など）設定してください。
 * **Color mode**: 通常はMPI-RRIMを選択してください。地形表現図の上にほかの地物を重ねて地図を作成する際に、赤色が煩雑になる場合には傾斜を黒色で表現した`Blue`のオプションを利用することができます。
-* **Stereo option**: MPI赤色立体地図の画像`（Normal (2D)）`だけでなく、アナグリフ画像`（Anaglyph）`やステレオペア画像（平行法・交差法）`（Stereopaired (parallel viewing) or Stereopaired (cross-eyed viewing)）`を選択できます。なお、ステレオペア画像を選択した場合には、左目用と右目用の2枚の画像が出力されます。**[Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)を利用することでステレオ実体視を行うことができます。**
+* **Stereo option**: MPI赤色立体地図の画像`（Normal (2D)）`だけでなく、アナグリフ画像`（Anaglyph）`やステレオペア画像（平行法・交差法）`（Stereopaired (parallel viewing) or Stereopaired (cross-eyed viewing)）`を選択できます。なお、ステレオペア画像を選択した場合には、左目用と右目用の2枚の画像が出力されます。左画像は変形をしていない画像なので、ほかの情報と重ねて表示することができます。**[Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)を利用することでステレオ実体視を行うことができます。**
 * **Vertical exaggeration**: ステレオ画像の過高感を調整します。Simple DEM Viewerで作成する場合と違い、`1`でも過高感が強めです。
 * **Increased (triple) resolution option**: チェックを入れるとDEMの解像度が3倍になり、微地形を実体視判読する際に問題となるテラス効果（平坦な地形が段々畑のように見える）が低減しますが、処理時間が長くなります。
 
