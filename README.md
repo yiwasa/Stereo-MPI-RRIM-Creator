@@ -78,7 +78,7 @@ Google's Gemini was used to assist with algorithm design, debugging, code refact
 All final design decisions, verifications, and operational tests were strictly conducted by the author.
 
 ## License
-[GNU General Public License v2.0](LICENSE)
+[GNU General Public License v3.0](LICENSE)
 
 # Japanese (日本語)
 
@@ -154,4 +154,4 @@ MPI赤色立体地図は[Kaneda and Chiba (2019)](https://pubs.geoscienceworld.o
 
 ---
 ## License
-[GNU General Public License v2.0](LICENSE)
+[GNU General Public License v3.0](LICENSE)
