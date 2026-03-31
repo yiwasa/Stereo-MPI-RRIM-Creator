@@ -110,7 +110,7 @@ All final design decisions, verifications, and operational tests were strictly c
 
 ## 使い方・パラメータのコツ
 * **Input DEM**: メートル単位の直交座標（x, y）のDEMを選択してください。緯度経度の地理座標系は対応していません。日本国内のDEMを準備する場合には、**PngTile2Demプラグイン**を利用することができます。
-* **Serch radius (pix)**: 実距離で **150m** 相当になるように設定することをおすすめします。
+* **Search radius (pix)**: 実距離で **150m** 相当になるように設定することをおすすめします。
   * 例: 1m DEMの場合は `150`。5m DEMの場合は `30`。
 * **Gamma**: コントラストを調整します。谷底をより暗く表現したい場合は、MPIのGammaを小さく（例：`0.8`など）設定してください。
 * **Color mode**: 通常はMPI-RRIMを選択してください。地形表現図の上にほかの地物を重ねて地図を作成する際に、赤色が煩雑になる場合には傾斜を黒色で表現した`Blue`のオプションを利用することができます。
