@@ -2,41 +2,42 @@
 
 English | [日本語](#japanese-日本語)
 
+# English
 ## Overview
 **Stereo MPI-RRIM Creator** is a QGIS plugin that generates Stereo Morphometric Protection Index Red Relief Image Maps (Stereo MPI-RRIMs) from Digital Elevation Models (DEMs).
 
-In addition to standard 2D images, it supports the generation of anaglyph images and stereopaired images (parallel viewing and cross-eyed viewing).
+In addition to 2D images, it supports the generation of anaglyph and stereopaired images (parallel viewing and cross-eyed viewing).
 
 ## Key Features
-* **Generate MPI-RRIMs**: Calculates the MPI (Morphometric Protection Index) and slope from a DEM to generate an MPI Red Relief Image Map.
-* **Color Modes**: In addition to the standard MPI-RRIM (Slope: Red, MPI: Cyan), a "Blue" option that represents the slope in black is available. This is useful when overlaying other map information and avoiding visual clutter.
+* **Generate MPI-RRIMs**: Calculates the MPI (Morphometric Protection Index) and slope from a DEM to generate an MPI-RRIMs.
+* **Color Modes**: In addition to the standard MPI-RRIM (Slope: Red, MPI: Cyan), a "Blue" option (Slope: Black, MPI: Cyan) is available. This is useful when overlaying other features and avoiding visual clutter.
 * **Stereo Output Support**:
   * Normal (2D image)
   * Anaglyph
   * Stereopaired (parallel viewing)
   * Stereopaired (cross-eyed viewing)
-* **Increased (Triple) Resolution Option**: By internally resampling the DEM to triple its resolution before processing, this option reduces the terracing effect and enables more detailed geomorphic interpretation, though processing time will increase.
+* **Increased (Triple) Resolution Option**: By internally resampling the DEM to triple its resolution before processing, this option reduces the terracing effect and enables more detailed geomorphic interpretation.
 
 ## Installation
 * **Download directly from the QGIS Plugin Repository**
   * Open QGIS, go to "Manage and Install Plugins...", search for "Stereo MPI-RRIM Creator", and install it.
-  * An icon will be added to your top panel, or you can find "Stereo MPI-RRIM Creator" in the Processing Toolbox.
+  * Icon will be added to top panel, or you can find "Stereo MPI-RRIM Creator" in the Processing Toolbox.
 
 * **Download from this repository**
   * Click "Code" at the top of this page and select "Download ZIP" to download the repository.
   * Open QGIS, go to "Manage and Install Plugins...", select "Install from ZIP", and choose the downloaded ZIP file.
   * Enable the plugin.
-  * An icon will be added to your top panel, or you can find "Stereo MPI-RRIM Creator" in the Processing Toolbox.
+  * Icon will be added to top panel, or you can find "Stereo MPI-RRIM Creator" in the Processing Toolbox.
 
 ## Usage & Parameter Tips
-* **Input DEM**: Select a DEM with a projected coordinate system (x, y) in meters. Geographic coordinate systems (latitude/longitude in degrees) are not supported.
+* **Input DEM**: Select a DEM projected in a metric Cartesian (x, y) coordinate system. Geographic coordinate systems (latitude/longitude in degrees) are not supported.
 * **Search radius (pix)**: It is recommended to set this value equivalent to an actual distance of **150 meters**.
   * *Example:* `150` for a 1m DEM; `30` for a 5m DEM.
 * **Gamma**: Adjusts the contrast. If you want to visualize valley bottoms darker, set a lower MPI Gamma value (e.g., `0.8`).
 * **Color mode**: Normally, select `MPI-RRIM`. If the red color becomes too visually noisy when overlaying other features on the map, you can use the `Blue` option, which visualizes the slope in black instead.
 * **Stereo option**: You can choose standard 2D output `(Normal (2D))`, `Anaglyph`, or stereopaired images `(Stereopaired (parallel viewing) or Stereopaired (cross-eyed viewing))`. Note that if you select stereopaired images, two separate image files (for the left and right eyes) will be generated. **You can view them stereoscopically using the [Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer).**
-* **Vertical exaggeration**: Adjusts the depth effect of the stereo images. Unlike generating with Simple DEM Viewer, an exaggeration of `1` already produces a relatively strong effect.
-* **Increased (triple) resolution option**: Checking this option triples the DEM resolution internally. This reduces the terracing effect but increases processing time.
+* **Vertical exaggeration**: Adjusts the vertical exeggerarion of the stereo images. Unlike generating with Simple DEM Viewer, an exaggeration of `1` produces a relatively strong exeggeration.
+* **Increased (triple) resolution option**: Checking this option triples the DEM resolution internally. This reduces the terracing effect (Flat areas appear terraced, which poses a problem for interpreting micro-topography) but increases processing time.
 
 ## Citation
 When publishing research papers using this plugin, please cite the following paper and explicitly state that this plugin was used.
@@ -44,25 +45,19 @@ When publishing research papers using this plugin, please cite the following pap
 Kaneda, H., and T. Chiba (2019), Stereopaired morphometric protection index red relief image maps (Stereo MPI-RRIMs): effective visualization of high-resolution digital elevation models for interpreting and mapping small tectonic geomorphic features, Bull. Seismol. Soc. Am., 109, 99–109. [https://doi.org/10.1785/0120180166](https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext)
 
 ## About MPI-RRIM
-MPI-RRIM is an improved topographic visualization method based on the [Red Relief Image Map (RRIM)](https://www.rrim.jp/), which was originally developed in 2002 and introduced by [Chiba and Suzuki (2004)](https://www.researchgate.net/publication/330634466_chiselitidetu-xinshiidexingbiaoxianshoufa-'Red_Relief_Image_Map'-The_new_visualization_method_qianyedalang_lingmuxiongjie) and [Chiba et al. (2008)](https://www.isprs.org/proceedings/XXXVII/congress/2_pdf/11_ThS-6/08.pdf).
+MPI-RRIM is an improved topographic visualization method proposed by [Kaneda and Chiba (2019)](https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext) based on the [Red Relief Image Map (RRIM)](https://www.rrim.jp/en/) ([Chiba and Suzuki, 2004](https://www.researchgate.net/publication/330634466_chiselitidetu-xinshiidexingbiaoxianshoufa-'Red_Relief_Image_Map'-The_new_visualization_method_qianyedalang_lingmuxiongjie): [Chiba et al., 2008](https://www.isprs.org/proceedings/XXXVII/congress/2_pdf/11_ThS-6/08.pdf)).
 
-MPI-RRIM was proposed by [Kaneda and Chiba (2019)](https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext). This plugin implements the generation of MPI-RRIMs and stereo images based on the methodologies detailed in Kaneda and Chiba (2019) and the [Stereo MPI-RRIMs Calculator](https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html).
+This plugin implements the generation of MPI-RRIMs and stereo images based on the methodologies detailed in Kaneda and Chiba (2019) and the [Stereo MPI-RRIMs Calculator](https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html).
 
 ## Acknowledgments
-We would like to express our deepest gratitude to Dr. Heitaro Kaneda of Chuo University for providing valuable insights and feedback regarding the MPI-RRIM generation methodology and the addition of new features during the development of this plugin.
+I would like to express my deepest gratitude to Dr. Heitaro Kaneda of Chuo University for providing valuable insights and feedback regarding the MPI-RRIM generation methodology and the addition of new features during the development of this plugin.
 
 Google's Gemini was used to assist with algorithm design, debugging, code refactoring, and drafting this README documentation for the creation and improvement of this plugin and its source code.
 
 All final design decisions, verifications, and operational tests were strictly conducted by the author.
 
-## References
-* Kaneda, H., & Chiba, T. (2019). [doi: 10.1785/0120180166](https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext)
-* [Stereo MPI-RRIMs Calculator](https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html)
-
----
 ## License
 [MIT License](LICENSE) (*Change the license if necessary)
----
 
 # Japanese (日本語)
 
@@ -100,7 +95,7 @@ All final design decisions, verifications, and operational tests were strictly c
 * **Color mode**: 通常はMPI-RRIMを選択してください。地形表現図の上にほかの地物を重ねて地図を作成する際に、赤色が煩雑になる場合には傾斜を黒色で表現した`Blue`のオプションを利用することができます。
 * **Stereo option**: MPI赤色立体地図の画像`（Normal (2D)）`だけでなく、アナグリフ画像`（Anaglyph）`やステレオペア画像（平行法・交差法）`（Stereopaired (parallel viewing) or Stereopaired (cross-eyed viewing)）`を選択できます。なお、ステレオペア画像を選択した場合には、左目用と右目用の2枚の画像が出力されます。**[Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)を利用することでステレオ実体視を行うことができます。**
 * **Vertical exaggeration**: ステレオ画像の過高感を調整します。Simple DEM Viewerで作成する場合と違い、`1`でも過高感が強めです。
-* **Increased (triple) resolution option**: チェックを入れるとDEMの解像度が3倍になり、テラス効果が低減しますが、処理時間が長くなります。
+* **Increased (triple) resolution option**: チェックを入れるとDEMの解像度が3倍になり、微地形を実体視判読する際に問題となるテラス効果（平坦な地形が段々畑のように見える）が低減しますが、処理時間が長くなります。
 
 ## 出典の明記について
 本プラグインを用いて研究論文を発表する際には、以下の論文を引用するとともに、プラグインを利用した旨を明記してください。
@@ -118,10 +113,6 @@ MPI赤色立体地図は[Kaneda and Chiba (2019)](https://pubs.geoscienceworld.o
 本プラグインおよびソースコードの作成・改良にあたっては、GoogleのGeminiを用い、アルゴリズム設計、デバッグ、コード整理および README 文書作成の補助を受けました。
 
 最終的な設計判断、検証、動作確認はすべて作者自身が行っています。
-
-## 参考文献
-Kaneda, H., & Chiba, T. (2019). [doi: 10.1785/0120180166](https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext)
-[Stereo MPI-RRIMs Calculator](https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html)
 
 ---
 ## License

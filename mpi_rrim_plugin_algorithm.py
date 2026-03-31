@@ -52,7 +52,7 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterNumber(self.RADIUS, self.tr('Search radius (pix)'), type=QgsProcessingParameterNumber.Integer, defaultValue=30, minValue=1))
         self.addParameter(QgsProcessingParameterNumber(self.GAMMA_MPI, self.tr('Gamma (MPI)'), type=QgsProcessingParameterNumber.Double, defaultValue=1.0, minValue=0.1))
         self.addParameter(QgsProcessingParameterNumber(self.GAMMA_SLOPE, self.tr('Gamma (slope)'), type=QgsProcessingParameterNumber.Double, defaultValue=0.8, minValue=0.1))
-        self.addParameter(QgsProcessingParameterEnum(self.COLOR_MODE, self.tr('Color mode'), options=['MPI-RRIM (Slope:red, MPI:Cyan)', 'Blue (Slope:red, MPI:Cyan)'], defaultValue=0))
+        self.addParameter(QgsProcessingParameterEnum(self.COLOR_MODE, self.tr('Color mode'), options=['MPI-RRIM (Slope:red, MPI:cyan)', 'Blue (Slope:black, MPI:cyan)'], defaultValue=0))
         self.addParameter(QgsProcessingParameterEnum(self.OUTPUT_TYPE, self.tr('Stereo option'), options=['Normal (2D)', 'Anaglyph', 'Stereopaired (parallel viewing)', 'Stereopaired (cross-eyed viewing)'], defaultValue=0))
         self.addParameter(QgsProcessingParameterNumber(self.STEREO_EXAGGERATION, self.tr('Vertical exaggeration (Try 1)'), type=QgsProcessingParameterNumber.Double, defaultValue=1.0, minValue=0.1))
         
