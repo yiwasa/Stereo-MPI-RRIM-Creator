@@ -1,6 +1,8 @@
-# Stereo MPI-RRIM Creator for QGIS
+# Stereo MPI-RRIM Creator Plugin for QGIS
 
-English | [日本語](#japanese-日本語)
+![Plugin overview](images/demo.gif)
+
+### English | [日本語](#japanese-日本語)
 
 # English
 ## Overview
@@ -39,6 +41,25 @@ In addition to 2D images, it supports the generation of anaglyph and stereopaire
 * **Vertical exaggeration**: Adjusts the vertical exeggerarion of the stereo images. Unlike generating with Simple DEM Viewer, an exaggeration of `1` produces a relatively strong exeggeration.
 * **Increased (triple) resolution option**: Checking this option triples the DEM resolution internally. This reduces the terracing effect (Flat areas appear terraced, which poses a problem for interpreting micro-topography) but increases processing time.
 
+## Screenshots
+
+### Plugin execution example
+![Plugin demo](images/demo.gif)
+
+*Example: Running the plugin and displaying the generated DEM in QGIS.*
+
+### Plugin image
+![Plugin image](images/screenshot_plugin.png)
+
+### Processing tool dialog
+![Processing tool dialog](images/screenshot_tool.png)
+
+### Output DEM example
+![Output DEM example](images/screenshot_result.png)
+
+### Create and display stereopaired images using [Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)
+![ステレオデモ](images/demo_stereo.gif)
+
 ## Citation
 When publishing research papers using this plugin, please cite the following paper and explicitly state that this plugin was used.
 
@@ -57,7 +78,7 @@ Google's Gemini was used to assist with algorithm design, debugging, code refact
 All final design decisions, verifications, and operational tests were strictly conducted by the author.
 
 ## License
-[MIT License](LICENSE) (*Change the license if necessary)
+[GNU General Public License v2.0](LICENSE)
 
 # Japanese (日本語)
 
@@ -88,7 +109,7 @@ All final design decisions, verifications, and operational tests were strictly c
   * 上部パネルにアイコンが追加、もしくはプロセシングツールボックスに「Stereo MPI-RRIM Creator」が追加
 
 ## 使い方・パラメータのコツ
-* **Input DEM**: メートル単位の直交座標（x, y）のDEMを選択してください。緯度経度の地理座標系は対応していません。
+* **Input DEM**: メートル単位の直交座標（x, y）のDEMを選択してください。緯度経度の地理座標系は対応していません。日本国内のDEMを準備する場合には、**PngTile2Demプラグイン**を利用することができます。
 * **Serch radius (pix)**: 実距離で **150m** 相当になるように設定することをおすすめします。
   * 例: 1m DEMの場合は `150`。5m DEMの場合は `30`。
 * **Gamma**: コントラストを調整します。谷底をより暗く表現したい場合は、MPIのGammaを小さく（例：`0.8`など）設定してください。
@@ -96,6 +117,23 @@ All final design decisions, verifications, and operational tests were strictly c
 * **Stereo option**: MPI赤色立体地図の画像`（Normal (2D)）`だけでなく、アナグリフ画像`（Anaglyph）`やステレオペア画像（平行法・交差法）`（Stereopaired (parallel viewing) or Stereopaired (cross-eyed viewing)）`を選択できます。なお、ステレオペア画像を選択した場合には、左目用と右目用の2枚の画像が出力されます。**[Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)を利用することでステレオ実体視を行うことができます。**
 * **Vertical exaggeration**: ステレオ画像の過高感を調整します。Simple DEM Viewerで作成する場合と違い、`1`でも過高感が強めです。
 * **Increased (triple) resolution option**: チェックを入れるとDEMの解像度が3倍になり、微地形を実体視判読する際に問題となるテラス効果（平坦な地形が段々畑のように見える）が低減しますが、処理時間が長くなります。
+
+## スクリーンショット
+
+### 実行デモ
+![実行デモ](images/demo.gif)
+
+### プラグイン画面
+![プラグイン画面](images/screenshot_plugin.png)
+
+### 処理ツール画面
+![処理ツール画面](images/screenshot_tool.png)
+
+### 出力された DEM の表示例
+![DEM 表示例](images/screenshot_result.png)
+
+### ステレオペア画像を[Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)で表示するデモ
+![ステレオデモ](images/demo_stereo.gif)
 
 ## 出典の明記について
 本プラグインを用いて研究論文を発表する際には、以下の論文を引用するとともに、プラグインを利用した旨を明記してください。
@@ -116,4 +154,4 @@ MPI赤色立体地図は[Kaneda and Chiba (2019)](https://pubs.geoscienceworld.o
 
 ---
 ## License
-[MIT License](LICENSE) (※必要に応じてライセンスを変更してください)
+[GNU General Public License v2.0](LICENSE)
