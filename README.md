@@ -33,6 +33,7 @@ In addition to 2D images, it supports the generation of anaglyph and stereopaire
 
 ## Usage & Parameter Tips
 * **Input DEM**: Select a DEM projected in a metric Cartesian (x, y) coordinate system. Geographic coordinate systems (latitude/longitude in degrees) are not supported.
+  * Note that the output MPI-RRIM will be smaller than the input DEM by the *Search radius*. If splitting large DEMs into tiles using GDAL **Retile** (`gdal:retile`), set the **Overlap** parameter to `Search radius * 2` (e.g., `600` for a 0.5m DEM; `300` for a 1m DEM).
 * **Search radius (pix)**: It is recommended to set this value equivalent to an actual distance of **150 meters**.
   * *Example:* `150` for a 1m DEM; `30` for a 5m DEM.
 * **Gamma**: Adjusts the contrast. If you want to visualize valley bottoms darker, set a lower MPI Gamma value (e.g., `0.8`).
@@ -110,6 +111,7 @@ All final design decisions, verifications, and operational tests were strictly c
 
 ## 使い方・パラメータのコツ
 * **Input DEM**: メートル単位の直交座標（x, y）のDEMを選択してください。緯度経度の地理座標系は対応していません。日本国内のDEMを準備する場合には、**PngTile2Demプラグイン**を利用することができます。
+  * MPI-RRIMsはSearch radius分だけ元のDEMよりも狭い範囲で生成されることに注意してください。広範囲のDEMを分割して処理をする場合には、QGISのプロセシングツールボックスから、「GDAL」→「ラスタその他」→「タイルを再タイル化」（gdal:retile）を利用して、「隣接するタイルと重なるピクセル数」のオプションに`検索半径*2`（0.5mDEM: 150/0.5*2=600、1mDEM: 150/1*2=300）の数を入力してください。
 * **Search radius (pix)**: 実距離で **150m** 相当になるように設定することをおすすめします。
   * 例: 1m DEMの場合は `150`。5m DEMの場合は `30`。
 * **Gamma**: コントラストを調整します。谷底をより暗く表現したい場合は、MPIのGammaを小さく（例：`0.8`など）設定してください。
