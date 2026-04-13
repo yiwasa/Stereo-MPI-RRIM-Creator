@@ -42,6 +42,8 @@ In addition to 2D images, it supports the generation of anaglyph and stereopaire
 * **Vertical exaggeration**: Adjusts the vertical exeggerarion of the stereo images. Unlike generating with Simple DEM Viewer, an exaggeration of `1` produces a relatively strong exeggeration.
 * **Increased (triple) resolution option**: Checking this option triples the DEM resolution internally. This reduces the terracing effect (Flat areas appear terraced, which poses a problem for interpreting micro-topography) but increases processing time.
 
+If you select “Normal (2D)” or ‘Anaglyph’ in the Stereo option, a warning such as “The following layers were not correctly generated. ~OUTPUT_RIGHT.tif” may appear after execution. Since the image generation was successful, you can safely ignore this warning. If you do not want this warning to appear, uncheck the “Open output file” box under Output Image (Right).
+
 ## Screenshots
 
 ### Plugin execution example
@@ -119,6 +121,10 @@ All final design decisions, verifications, and operational tests were strictly c
 * **Stereo option**: MPI赤色立体地図の画像`（Normal (2D)）`だけでなく、アナグリフ画像`（Anaglyph）`やステレオペア画像（平行法・交差法）`（Stereopaired (parallel viewing) or Stereopaired (cross-eyed viewing)）`を選択できます。なお、ステレオペア画像を選択した場合には、左目用と右目用の2枚の画像が出力されます。左画像は変形をしていない画像なので、ほかの情報と重ねて表示することができます。**[Stereo Image Viewer Plugin](https://github.com/yiwasa/Stereo-Image-Viewer)を利用することでステレオ実体視を行うことができます。**
 * **Vertical exaggeration**: ステレオ画像の過高感を調整します。Simple DEM Viewerで作成する場合と違い、`1`でも過高感が強めです。
 * **Increased (triple) resolution option**: チェックを入れるとDEMの解像度が3倍になり、微地形を実体視判読する際に問題となるテラス効果（平坦な地形が段々畑のように見える）が低減しますが、処理時間が長くなります。
+
+Stereo optionで「Normal (2D)」または「Anaglyph」を選択した場合、実行後に「次のレイヤは正しく生成されませんでした。〜OUTPUT_RIGHT.tif」という警告が出ることがあります。
+
+画像生成は正常に成功していますので、無視していただいて問題ありません。警告を出したくない場合は、Output Image(Right) の「出力ファイルを開く」のチェックを外してください。
 
 ## スクリーンショット
 
