@@ -236,15 +236,7 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             
             shift = (dem_valid - dem_min) * exaggeration / curr_dx
             shift = np.round(shift).astype(int)
-            
-            # 最大シフト量を計算し、右目用キャンバスだけを左側に拡張
             max_shift = int(np.max(shift))
-            curr_cols_ext = curr_cols + max_shift
-            
-            # 拡張分、右目用画像の地理座標の原点(X)を左へ移動
-            curr_gt_ext = list(curr_gt)
-            curr_gt_ext[0] = curr_gt[0] - max_shift * curr_dx
-            curr_gt_ext = tuple(curr_gt_ext)
             
             Y, X = np.indices((curr_rows, curr_cols))
             Z_flat = dem_valid.flatten()
@@ -258,13 +250,30 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             G_s = G_L.flatten()[sort_idx]
             B_s = B_L.flatten()[sort_idx]
             
+            # 出力タイプに応じてシフト方向とキャンバスサイズを決定
+            if output_type == 1:
+                # アナグリフ: 元のサイズ（拡張なし）、左にシフト
+                curr_cols_ext = curr_cols
+                curr_gt_ext = tuple(curr_gt)
+                X_R = X_s - S_s
+            elif output_type == 2:
+                # 平行法: 左側に拡張、左にシフト
+                curr_cols_ext = curr_cols + max_shift
+                curr_gt_ext = list(curr_gt)
+                curr_gt_ext[0] = curr_gt[0] - max_shift * curr_dx
+                curr_gt_ext = tuple(curr_gt_ext)
+                X_R = X_s - S_s + max_shift
+            elif output_type == 3:
+                # 交差法: 右側に拡張、右にシフト
+                curr_cols_ext = curr_cols + max_shift
+                curr_gt_ext = tuple(curr_gt) # 左端の原点は変わらない
+                X_R = X_s + S_s
+            
             R_R_canvas = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
             G_R_canvas = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
             B_R_canvas = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
             written_R = np.zeros((curr_rows, curr_cols_ext), dtype=bool)
             
-            # オフセット位置にmax_shiftを足して、左端が切れないようにする
-            X_R = X_s - S_s + max_shift
             valid_R = (X_R >= 0) & (X_R < curr_cols_ext)
             
             R_R_canvas[Y_s[valid_R], X_R[valid_R]] = R_s[valid_R]
@@ -289,36 +298,33 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             G_R = fill_holes(G_R_canvas, written_R, curr_cols_ext)
             B_R = fill_holes(B_R_canvas, written_R, curr_cols_ext)
 
-            # --- ここから追加：引き伸ばされた「範囲外のニセ地形」を消去する処理 ---
-            left_bounds = max_shift - shift[:, 0]
-            right_bounds = (curr_cols - 1) - shift[:, -1] + max_shift
+            # 引き伸ばされた「範囲外のニセ地形」を消去
             _, X_grid = np.indices((curr_rows, curr_cols_ext))
-            mask_out_of_bounds = (X_grid < left_bounds[:, None]) | (X_grid > right_bounds[:, None])
+            if output_type == 1:
+                right_bounds = (curr_cols - 1) - shift[:, -1]
+                mask_out_of_bounds = X_grid > right_bounds[:, None]
+            elif output_type == 2:
+                left_bounds = max_shift - shift[:, 0]
+                right_bounds = (curr_cols - 1) - shift[:, -1] + max_shift
+                mask_out_of_bounds = (X_grid < left_bounds[:, None]) | (X_grid > right_bounds[:, None])
+            elif output_type == 3:
+                left_bounds = shift[:, 0]
+                right_bounds = (curr_cols - 1) + shift[:, -1]
+                mask_out_of_bounds = (X_grid < left_bounds[:, None]) | (X_grid > right_bounds[:, None])
             
             R_R[mask_out_of_bounds] = 255
             G_R[mask_out_of_bounds] = 255
             B_R[mask_out_of_bounds] = 255
-            # ----------------------------------------------------------------------
 
             if output_type == 1:
-                # アナグリフ出力時は1枚の画像に合成するため、エラー回避用として左目側にも余白を足します
-                R_L_ext = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
-                R_L_ext[:, max_shift:] = R_L
-                save_tiff(output_file, R_L_ext, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
+                # アナグリフ: 元のサイズのキャンバスで、Rに左目(オフセットなし)、G/Bに右目
+                save_tiff(output_file, R_L, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
                 results = {self.OUTPUT: output_file}
-            elif output_type == 2:
-                # ステレオペアの場合、左目用画像(R_L, G_L, B_L)は元のサイズのまま出力します
+            elif output_type == 2 or output_type == 3:
+                # 平行法・交差法共通: 左目はオフセットなしで出力1へ、右目(シフト済)は出力2へ
                 save_tiff(output_file, R_L, G_L, B_L, curr_rows, curr_cols, curr_gt, curr_trim)
                 if output_right_file:
                     save_tiff(output_right_file, R_R, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
-                    results = {self.OUTPUT: output_file, self.OUTPUT_RIGHT: output_right_file}
-                else:
-                    results = {self.OUTPUT: output_file}
-            elif output_type == 3:
-                # ステレオペア(交差法)の場合も、左目用画像は元のサイズのまま出力します
-                save_tiff(output_file, R_R, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
-                if output_right_file:
-                    save_tiff(output_right_file, R_L, G_L, B_L, curr_rows, curr_cols, curr_gt, curr_trim)
                     results = {self.OUTPUT: output_file, self.OUTPUT_RIGHT: output_right_file}
                 else:
                     results = {self.OUTPUT: output_file}
