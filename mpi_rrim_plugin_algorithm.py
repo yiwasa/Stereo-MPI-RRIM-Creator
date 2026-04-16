@@ -43,8 +43,8 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
         <p>Please refer to <a href="https://github.com/yiwasa/Stereo-MPI-RRIM-Creator">the manual</a> for details.</p>
         <p>Recommend setting: Search radius of 150 m (for 5 m DEM: Search radius of 30 pixels). / Search radiusは150mがおすすめです（5m DEMの場合はSearch radius: 30）。</p>
         <p>To output anaglyph images or stereo pair images, please change the Stereo option. You can use the Stereo Image Viewer Plugin to view stereo images./ アナグリフ・ステレオペア画像の出力にはStereo optionを変更してください。Stereo Image Viewer Pluginを利用してステレオペア画像を表示できます。</p>
-        <p></p>
-        <p>References：Kaneda, H., & Chiba, T. (2019). <a href="https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext">doi: 10.1785/0120180166</a> / <a href="https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html">Stereo MPI-RRIMs Calculator</a></p>
+        <p>If you use this plugin in your research, please cite Kaneda and Chiba (2019). / このプラグインを使って論文を書く際にはKaneda and Chiba (2019)を引用してください。</p>
+        <p>References：Kaneda, H. and Chiba, T. (2019). <a href="https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext">doi: 10.1785/0120180166</a> / <a href="https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html">Stereo MPI-RRIMs Calculator</a></p>
         """)
 
     def initAlgorithm(self, config=None):
@@ -237,6 +237,15 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             shift = (dem_valid - dem_min) * exaggeration / curr_dx
             shift = np.round(shift).astype(int)
             
+            # 最大シフト量を計算し、右目用キャンバスだけを左側に拡張
+            max_shift = int(np.max(shift))
+            curr_cols_ext = curr_cols + max_shift
+            
+            # 拡張分、右目用画像の地理座標の原点(X)を左へ移動
+            curr_gt_ext = list(curr_gt)
+            curr_gt_ext[0] = curr_gt[0] - max_shift * curr_dx
+            curr_gt_ext = tuple(curr_gt_ext)
+            
             Y, X = np.indices((curr_rows, curr_cols))
             Z_flat = dem_valid.flatten()
             sort_idx = np.argsort(Z_flat)
@@ -249,13 +258,14 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             G_s = G_L.flatten()[sort_idx]
             B_s = B_L.flatten()[sort_idx]
             
-            R_R_canvas = np.zeros((curr_rows, curr_cols), dtype=np.uint8)
-            G_R_canvas = np.zeros((curr_rows, curr_cols), dtype=np.uint8)
-            B_R_canvas = np.zeros((curr_rows, curr_cols), dtype=np.uint8)
-            written_R = np.zeros((curr_rows, curr_cols), dtype=bool)
+            R_R_canvas = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
+            G_R_canvas = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
+            B_R_canvas = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
+            written_R = np.zeros((curr_rows, curr_cols_ext), dtype=bool)
             
-            X_R = X_s - S_s
-            valid_R = (X_R >= 0) & (X_R < curr_cols)
+            # オフセット位置にmax_shiftを足して、左端が切れないようにする
+            X_R = X_s - S_s + max_shift
+            valid_R = (X_R >= 0) & (X_R < curr_cols_ext)
             
             R_R_canvas[Y_s[valid_R], X_R[valid_R]] = R_s[valid_R]
             G_R_canvas[Y_s[valid_R], X_R[valid_R]] = G_s[valid_R]
@@ -275,22 +285,38 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
                     w[hole, c] = w[hole, c + 1]
                 return out
 
-            R_R = fill_holes(R_R_canvas, written_R, curr_cols)
-            G_R = fill_holes(G_R_canvas, written_R, curr_cols)
-            B_R = fill_holes(B_R_canvas, written_R, curr_cols)
+            R_R = fill_holes(R_R_canvas, written_R, curr_cols_ext)
+            G_R = fill_holes(G_R_canvas, written_R, curr_cols_ext)
+            B_R = fill_holes(B_R_canvas, written_R, curr_cols_ext)
+
+            # --- ここから追加：引き伸ばされた「範囲外のニセ地形」を消去する処理 ---
+            left_bounds = max_shift - shift[:, 0]
+            right_bounds = (curr_cols - 1) - shift[:, -1] + max_shift
+            _, X_grid = np.indices((curr_rows, curr_cols_ext))
+            mask_out_of_bounds = (X_grid < left_bounds[:, None]) | (X_grid > right_bounds[:, None])
+            
+            R_R[mask_out_of_bounds] = 255
+            G_R[mask_out_of_bounds] = 255
+            B_R[mask_out_of_bounds] = 255
+            # ----------------------------------------------------------------------
 
             if output_type == 1:
-                save_tiff(output_file, R_L, G_R, B_R, curr_rows, curr_cols, curr_gt, curr_trim)
+                # アナグリフ出力時は1枚の画像に合成するため、エラー回避用として左目側にも余白を足します
+                R_L_ext = np.full((curr_rows, curr_cols_ext), 255, dtype=np.uint8)
+                R_L_ext[:, max_shift:] = R_L
+                save_tiff(output_file, R_L_ext, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
                 results = {self.OUTPUT: output_file}
             elif output_type == 2:
+                # ステレオペアの場合、左目用画像(R_L, G_L, B_L)は元のサイズのまま出力します
                 save_tiff(output_file, R_L, G_L, B_L, curr_rows, curr_cols, curr_gt, curr_trim)
                 if output_right_file:
-                    save_tiff(output_right_file, R_R, G_R, B_R, curr_rows, curr_cols, curr_gt, curr_trim)
+                    save_tiff(output_right_file, R_R, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
                     results = {self.OUTPUT: output_file, self.OUTPUT_RIGHT: output_right_file}
                 else:
                     results = {self.OUTPUT: output_file}
             elif output_type == 3:
-                save_tiff(output_file, R_R, G_R, B_R, curr_rows, curr_cols, curr_gt, curr_trim)
+                # ステレオペア(交差法)の場合も、左目用画像は元のサイズのまま出力します
+                save_tiff(output_file, R_R, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
                 if output_right_file:
                     save_tiff(output_right_file, R_L, G_L, B_L, curr_rows, curr_cols, curr_gt, curr_trim)
                     results = {self.OUTPUT: output_file, self.OUTPUT_RIGHT: output_right_file}

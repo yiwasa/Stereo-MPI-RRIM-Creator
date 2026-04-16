@@ -6,9 +6,11 @@
 
 # English
 ## Overview
-**Stereo MPI-RRIM Creator** is a QGIS plugin that generates Stereo Morphometric Protection Index Red Relief Image Maps (Stereo MPI-RRIMs) from Digital Elevation Models (DEMs).
+**Stereo MPI-RRIM Creator** is a QGIS plugin that generates Stereopaired Morphometric Protection Index Red Relief Image Maps (Stereopaired MPI-RRIMs) from Digital Elevation Models (DEMs).
 
 In addition to 2D images, it supports the generation of anaglyph and stereopaired images (parallel viewing and cross-eyed viewing).
+
+If you use this plugin in your research, please cite Kaneda and Chiba (2019).
 
 ## Key Features
 * **Generate MPI-RRIMs**: Calculates the MPI (Morphometric Protection Index) and slope from a DEM to generate an MPI-RRIMs.
@@ -71,7 +73,7 @@ Kaneda, H., and T. Chiba (2019), Stereopaired morphometric protection index red 
 ## About MPI-RRIM
 MPI-RRIM is an improved topographic visualization method proposed by [Kaneda and Chiba (2019)](https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext) based on the [Red Relief Image Map (RRIM)](https://www.rrim.jp/en/) ([Chiba and Suzuki, 2004](https://www.researchgate.net/publication/330634466_chiselitidetu-xinshiidexingbiaoxianshoufa-'Red_Relief_Image_Map'-The_new_visualization_method_qianyedalang_lingmuxiongjie): [Chiba et al., 2008](https://www.isprs.org/proceedings/XXXVII/congress/2_pdf/11_ThS-6/08.pdf)).
 
-This plugin implements the generation of MPI-RRIMs and stereo images based on the methodologies detailed in Kaneda and Chiba (2019) and the [Stereo MPI-RRIMs Calculator](https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html).
+This plugin implements the generation of MPI-RRIMs and stereopaired images based on the methodologies detailed in Kaneda and Chiba (2019) and the [Stereo MPI-RRIMs Calculator](https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html).
 
 ## Acknowledgments
 I would like to express my deepest gratitude to Dr. Heitaro Kaneda of Chuo University for providing valuable insights and feedback regarding the MPI-RRIM generation methodology and the addition of new features during the development of this plugin.
@@ -86,9 +88,11 @@ All final design decisions, verifications, and operational tests were strictly c
 # Japanese (日本語)
 
 ## 概要
-**Stereo MPI-RRIM Creator** は、DEM（数値標高モデル）からステレオMPI赤色立体地図（Stereo MPI-RRIM）を作成するQGISプラグインです。
+**Stereo MPI-RRIM Creator** は、DEM（数値標高モデル）からステレオMPI赤色立体地図（Stereopaired MPI-RRIM）を作成するQGISプラグインです。
 
 通常の2D画像のほかに、アナグリフ画像やステレオペア画像（平行法・交差法）の生成に対応しています。
+
+このプラグインを使って論文を書く際にはKaneda and Chiba (2019)を引用してください。
 
 ## 主な機能
 * **MPI-RRIMの生成**: DEMからMPI（Morphometric Protection Index：保護指数）と傾斜角を計算してMPI赤色立体地図を生成します。

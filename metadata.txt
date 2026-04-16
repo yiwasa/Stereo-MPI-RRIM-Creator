@@ -2,11 +2,13 @@
 name=Stereo MPI-RRIM Creator
 qgisMinimumVersion=3.0
 description=Generate stereo MPI-RRIM from DEM / DEMからステレオMPI赤色立体地図を生成します
-version=1.0
+version=1.1
 author=Y. Iwasa
 email=yiwasa0607@gmail.com
+tracker=https://github.com/yiwasa/Stereo-MPI-RRIM-Creator
+homepage=https://github.com/yiwasa/Stereo-MPI-RRIM-Creator
 
-about=This plugin generates a stereo morphometric protection index (MPI) red relief image maps (MPI-RRIMs) from a Digital Elevation Model (DEM). Please refer to <a href="https://github.com/yiwasa/Stereo-MPI-RRIM-Creator">the manual</a> for details./ このプラグインは、DEM（デジタル標高モデル）からMPIと傾斜角を計算し、ステレオMPI赤色立体地図を生成する地形解析ツールです。詳しい操作方法は<a href="https://github.com/yiwasa/Stereo-MPI-RRIM-Creator">こちら</a>。MPI赤色立体地図は以下の手法によって処理されています。Kaneda, H., & Chiba, T. (2019). <a href="https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext">doi: 10.1785/0120180166</a>. <a href="https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html">Stereo MPI-RRIMs Calculator</a>
+about=This plugin generates a stereo morphometric protection index (MPI) red relief image maps (MPI-RRIMs) from a Digital Elevation Model (DEM). Please refer to <a href="https://github.com/yiwasa/Stereo-MPI-RRIM-Creator">the manual</a> for details. If you use this plugin in your research, please cite Kaneda and Chiba (2019). / このプラグインは、DEM（デジタル標高モデル）からMPIと傾斜角を計算し、ステレオMPI赤色立体地図を生成する地形解析ツールです。詳しい操作方法は<a href="https://github.com/yiwasa/Stereo-MPI-RRIM-Creator">こちら</a>。MPI赤色立体地図は以下の手法によって処理されています。このプラグインを使って論文を書く際にはKaneda and Chiba (2019)を引用してください。Kaneda, H. and Chiba, T. (2019). <a href="https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/109/1/99/567965/Stereopaired-Morphometric-Protection-Index-Red?redirectedFrom=fulltext">doi: 10.1785/0120180166</a>. <a href="https://civil.r.chuo-u.ac.jp/lab/geology/5_mrrim/mrrim.html">Stereo MPI-RRIMs Calculator</a>
 
 repository=https://github.com/yiwasa/Stereo-MPI-RRIM-Creator
 
