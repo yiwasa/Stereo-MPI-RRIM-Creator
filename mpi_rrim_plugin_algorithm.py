@@ -92,8 +92,9 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             feedback.setProgressText("Increased (triple) resolution option in progress...")
             from scipy.ndimage import zoom
             
-            # DEMをバイリニア補間(order=1)で3倍に拡大
-            dem = zoom(dem, 3, order=1)
+            # 境界外が0として計算され「巨大な下駄」が生じる現象と補間バグを防ぐため、設定を追加
+            dem = zoom(dem, 3, order=1, mode='nearest', prefilter=False)
+            
             rows, cols = dem.shape
             
             # 解像度が3倍になったので、ピクセルサイズ（dx, dy）は 1/3 になる
