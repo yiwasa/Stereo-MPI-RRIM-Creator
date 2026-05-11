@@ -253,10 +253,10 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             
             # 出力タイプに応じてシフト方向とキャンバスサイズを決定
             if output_type == 1:
-                # アナグリフ: 元のサイズ（拡張なし）、左にシフト
+                # アナグリフ: 元のサイズ（拡張なし）、右にシフト (視差の向きを保つため)
                 curr_cols_ext = curr_cols
                 curr_gt_ext = tuple(curr_gt)
-                X_R = X_s - S_s
+                X_R = X_s + S_s
             elif output_type == 2:
                 # 平行法: 左側に拡張、左にシフト
                 curr_cols_ext = curr_cols + max_shift
@@ -302,8 +302,8 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             # 引き伸ばされた「範囲外のニセ地形」を消去
             _, X_grid = np.indices((curr_rows, curr_cols_ext))
             if output_type == 1:
-                right_bounds = (curr_cols - 1) - shift[:, -1]
-                mask_out_of_bounds = X_grid > right_bounds[:, None]
+                left_bounds = shift[:, 0]
+                mask_out_of_bounds = X_grid < left_bounds[:, None]
             elif output_type == 2:
                 left_bounds = max_shift - shift[:, 0]
                 right_bounds = (curr_cols - 1) - shift[:, -1] + max_shift
@@ -318,8 +318,8 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             B_R[mask_out_of_bounds] = 255
 
             if output_type == 1:
-                # アナグリフ: 元のサイズのキャンバスで、Rに左目(オフセットなし)、G/Bに右目
-                save_tiff(output_file, R_L, G_R, B_R, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
+                # アナグリフ: Rに右目(シフトあり)、G/Bに左目(オフセットなし)
+                save_tiff(output_file, R_R, G_L, B_L, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
                 results = {self.OUTPUT: output_file}
             elif output_type == 2 or output_type == 3:
                 # 平行法・交差法共通: 左目はオフセットなしで出力1へ、右目(シフト済)は出力2へ
