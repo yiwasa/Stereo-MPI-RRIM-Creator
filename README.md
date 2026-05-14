@@ -35,7 +35,7 @@ If you use this plugin in your research, please cite Kaneda and Chiba (2019).
 
 ## Usage & Parameter Tips
 * **Input DEM**: Select a DEM projected in a metric Cartesian (x, y) coordinate system. Geographic coordinate systems (latitude/longitude in degrees) are not supported.
-  * Note that the output MPI-RRIM will be smaller than the input DEM by the *Search radius*. If splitting large DEMs into tiles using GDAL **Retile** (`gdal:retile`), set the **Overlap** parameter to `Search radius * 2` (e.g., `600` for a 0.5m DEM; `300` for a 1m DEM).
+  * If splitting large DEMs into tiles using GDAL **Retile** (`gdal:retile`), set the **Overlap** parameter to `Search radius * 2` (e.g., `600` for a 0.5m DEM; `300` for a 1m DEM). Also, when processing with this plugin, make sure to turn on the “Trim edges by search radius” box.
 * **Search radius (pix)**: It is recommended to set this value equivalent to an actual distance of **150 meters**.
   * *Example:* `150` for a 1m DEM; `30` for a 5m DEM.
 * **Gamma**: Adjusts the contrast. If you want to visualize valley bottoms darker, set a lower MPI Gamma value (e.g., `0.8`).
