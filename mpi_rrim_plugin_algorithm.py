@@ -326,8 +326,10 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
             B_R[mask_out_of_bounds] = 255
 
             if output_type == 1:
-                # アナグリフ: Rに右目(シフトあり)、G/Bに左目(オフセットなし)
-                save_tiff(output_file, R_R, G_L, B_L, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
+                # アナグリフ: 左右の目に同じ情報（傾斜＋MPI）が届くようグレースケール化
+                gray_R = (0.299 * R_R + 0.587 * G_R + 0.114 * B_R).astype(np.uint8)
+                gray_L = (0.299 * R_L + 0.587 * G_L + 0.114 * B_L).astype(np.uint8)
+                save_tiff(output_file, gray_R, gray_L, gray_L, curr_rows, curr_cols_ext, curr_gt_ext, curr_trim)
                 results = {self.OUTPUT: output_file}
             elif output_type == 2 or output_type == 3:
                 # 平行法・交差法共通: 左目はオフセットなしで出力1へ、右目(シフト済)は出力2へ

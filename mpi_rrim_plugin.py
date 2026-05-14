@@ -78,4 +78,7 @@ class MpiRrimPluginPlugin(object):
     
     def run(self):
         # さきほど id() で設定した 'mpirrim' と、アルゴリズムの 'create_mpi_rrim' を繋いで呼び出す
-        processing.execAlgorithmDialog('mpirrim:create_mpi_rrim')
+        try:
+            processing.execAlgorithmDialog('mpirrim:create_mpi_rrim')
+        except RuntimeError:
+            pass
