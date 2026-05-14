@@ -50,6 +50,7 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterRasterLayer(self.INPUT, self.tr('Input DEM')))
         self.addParameter(QgsProcessingParameterNumber(self.RADIUS, self.tr('Search radius (pix)'), type=QgsProcessingParameterNumber.Integer, defaultValue=30, minValue=1))
+        self.addParameter(QgsProcessingParameterBoolean('TRIM_EDGES', self.tr('Trim edges by search radius (Turn ON if processing divided (tiled) DEMs)'), defaultValue=False))
         self.addParameter(QgsProcessingParameterNumber(self.GAMMA_MPI, self.tr('Gamma (MPI)'), type=QgsProcessingParameterNumber.Double, defaultValue=1.0, minValue=0.1))
         self.addParameter(QgsProcessingParameterNumber(self.GAMMA_SLOPE, self.tr('Gamma (slope)'), type=QgsProcessingParameterNumber.Double, defaultValue=0.8, minValue=0.1))
         self.addParameter(QgsProcessingParameterEnum(self.COLOR_MODE, self.tr('Color mode'), options=['MPI-RRIM (Slope:red, MPI:cyan)', 'Blue (Slope:black, MPI:cyan)'], defaultValue=0))
@@ -70,6 +71,7 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
         output_type = self.parameterAsEnum(parameters, self.OUTPUT_TYPE, context)
         exaggeration = self.parameterAsDouble(parameters, self.STEREO_EXAGGERATION, context)
         high_res_stereo = self.parameterAsBool(parameters, 'HIGH_RES_STEREO', context)
+        trim_edges = self.parameterAsBool(parameters, 'TRIM_EDGES', context)
         
         output_file = self.parameterAsOutputLayer(parameters, self.OUTPUT, context)
         output_right_file = self.parameterAsOutputLayer(parameters, self.OUTPUT_RIGHT, context)
@@ -191,9 +193,15 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
         B[np.isnan(dem)] = 255
 
         def save_tiff(filepath, r_arr, g_arr, b_arr, r_shape, c_shape, geo_t, trim_px):
-            trim = trim_px
+            # 切り取り設定が有効(True)な場合のみ、半径分のトリミングを行う
+            if trim_edges:
+                trim = trim_px
+            else:
+                trim = 0
+
             if r_shape <= 2 * trim or c_shape <= 2 * trim:
                 trim = 0
+            
             if trim > 0:
                 out_r = r_arr[trim:r_shape-trim, trim:c_shape-trim]
                 out_g = g_arr[trim:r_shape-trim, trim:c_shape-trim]
