@@ -92,7 +92,7 @@ All final design decisions, verifications, and operational tests were strictly c
 
 通常の2D画像のほかに、アナグリフ画像やステレオペア画像（平行法・交差法）の生成に対応しています。
 
-このプラグインを使って論文を書く際にはKaneda and Chiba (2019)を引用してください。
+このプラグインを使って論文を書く際にはKaneda and Chiba (2019)を引用するとともに、プラグインを利用した旨を明記してください。
 
 ## 主な機能
 * **MPI-RRIMの生成**: DEMからMPI（Morphometric Protection Index：保護指数）と傾斜角を計算してMPI赤色立体地図を生成します。
