@@ -50,7 +50,7 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         self.addParameter(QgsProcessingParameterRasterLayer(self.INPUT, self.tr('Input DEM')))
         self.addParameter(QgsProcessingParameterNumber(self.RADIUS, self.tr('Search radius (pix)'), type=QgsProcessingParameterNumber.Integer, defaultValue=30, minValue=1))
-        self.addParameter(QgsProcessingParameterBoolean('TRIM_EDGES', self.tr('Trim edges by search radius (Turn ON if processing divided (tiled) DEMs)'), defaultValue=False))
+        self.addParameter(QgsProcessingParameterBoolean('TRIM_EDGES', self.tr('Trim edges by search radius (Turn on if processing divided (tiled) DEMs)'), defaultValue=False))
         self.addParameter(QgsProcessingParameterNumber(self.GAMMA_MPI, self.tr('Gamma (MPI)'), type=QgsProcessingParameterNumber.Double, defaultValue=1.0, minValue=0.1))
         self.addParameter(QgsProcessingParameterNumber(self.GAMMA_SLOPE, self.tr('Gamma (slope)'), type=QgsProcessingParameterNumber.Double, defaultValue=0.8, minValue=0.1))
         self.addParameter(QgsProcessingParameterEnum(self.COLOR_MODE, self.tr('Color mode'), options=['MPI-RRIM (Slope:red, MPI:cyan)', 'Blue (Slope:black, MPI:cyan)'], defaultValue=0))
@@ -146,7 +146,7 @@ class CreateMPIRRIMAlgorithm(QgsProcessingAlgorithm):
                 dem_offset = dem[ys_src:ye_src, xs_src:xe_src]
                 dz = dem_offset - dem_center
                 dz /= (r * dist_unit)
-                np.maximum(max_tangent[ys_dst:ye_dst, xs_dst:xe_dst], dz, out=max_tangent[ys_dst:ye_dst, xs_dst:xe_dst])
+                np.fmax(max_tangent[ys_dst:ye_dst, xs_dst:xe_dst], dz, out=max_tangent[ys_dst:ye_dst, xs_dst:xe_dst])
             
             mpi += np.arctan(max_tangent)
 
