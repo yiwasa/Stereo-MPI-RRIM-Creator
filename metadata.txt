@@ -1,6 +1,7 @@
 [general]
 name=Stereo MPI-RRIM Creator
 qgisMinimumVersion=3.0
+qgisMaximumVersion=4.99
 description=Generate stereo MPI-RRIM from DEM / DEMからステレオMPI赤色立体地図を生成します
 version=1.4
 author=Y. Iwasa
